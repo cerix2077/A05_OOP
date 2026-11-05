@@ -37,10 +37,10 @@
         <TextBox Name="FileTextBox" Grid.Row="1" AcceptsReturn="True" AcceptsTab="True"/>
 
         <!-- STATUS CONTENT -->
-        
-        
-        
-        
+
+        <TextBlock Grid.Row="2">this is text</TextBlock>
+
+
         <!--<TextBlock Grid.Row="1" Text="hello world" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
     </Grid>
 </Window>
