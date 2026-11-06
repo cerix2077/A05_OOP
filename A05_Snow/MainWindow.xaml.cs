@@ -22,6 +22,19 @@ namespace A05_Snow
         // this string holds the origin state of the content within the FileTextBox,
         //  it is empty on a blank page and will be set to the data in an opened file or text data successfully saved
         private string _comparatorString = string.Empty; 
+        private string _workingFile = string.Empty;
+
+        public string comparatorString
+        {
+            get { return _comparatorString; }
+            set { _comparatorString = value; }
+        }
+
+        public string workingFile
+        {
+            get { return _workingFile; }
+            set {  _workingFile = value; }
+        }
 
         public MainWindow()
         {
@@ -30,7 +43,7 @@ namespace A05_Snow
 
         public void NewFile(object sender, RoutedEventArgs e)
         {
-            if(FileTextBox.Text != _comparatorString)
+            if(FileTextBox.Text != comparatorString)
             {
                 //prompt user for yes/no/cancel with focus set onto yes for enter press selection
             }
@@ -38,14 +51,27 @@ namespace A05_Snow
 
         public void OpenFile(object sender, RoutedEventArgs e)
         {
+            if (FileTextBox.Text != comparatorString)
+            {
+                //prompt user for yes/no/cancel with focus set onto yes for enter press selection
+            }
+            else
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                if(ofd.ShowDialog() == true)
+                {
+                    FileTextBox.Text = File.ReadAllText(ofd.FileName);
+                    comparatorString = FileTextBox.Text; // this is the current 
+                }
+            }
         }
 
         public void SaveFile(object sender, RoutedEventArgs e)
         {
             // check if a file exists to save too, otherwise use SaveFileAs()
-            if(false)// file was found to save too
+            if(workingFile != null)// file was found to save too
             {
-
+                File.WriteAllText(workingFile, FileTextBox.Text);
             }
             else
             {
@@ -55,15 +81,11 @@ namespace A05_Snow
 
         public void SaveFileAs(object sender, RoutedEventArgs e)
         {
-            Stream writeStream;
-            SaveFileDialog sv = new SaveFileDialog();
-            if(sv.ShowDialog() == true) // returns true if user selects ok 
+            SaveFileDialog sfd = new SaveFileDialog();
+            if(sfd.ShowDialog() == true) // returns true if user selects ok 
             {
-                if((writeStream = sv.OpenFile()) != null) //check that stream opens file
-                {
-                    // code to write stream to file, this should overwrite and never append
-                    writeStream.Close(); //close stream
-                }
+                workingFile = sfd.FileName;
+                File.WriteAllText(workingFile, FileTextBox.Text);
             }
         }
 
