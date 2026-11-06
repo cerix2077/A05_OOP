@@ -33,7 +33,7 @@
 
         <!-- CENTERAL CONENT -->
         <Grid>
-            <TextBox Name="FileTextBox" Grid.Row="1" AcceptsReturn="True" AcceptsTab="True" TextChanged="UpdateCharCount" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"/>
+            <TextBox Name="FileTextBox" Grid.Row="1" AcceptsReturn="True" AcceptsTab="True" TextChanged="UpdateCharCount"/>
         </Grid>
     </DockPanel>
 </Window>
