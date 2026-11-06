@@ -5,23 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:A05_Snow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        
-        <!-- HEADER CONTENT -->
+        Title="SETpad - Untitled" Height="450" Width="800">
 
-        <Menu Height="25" Grid.Row="0" >
+
+    <DockPanel>
+        <!-- MENU CONTENT -->
+        <Menu DockPanel.Dock="Top" Height="25" >
             <MenuItem Header="_File">
                 <MenuItem Header="_New" Click="NewFile"></MenuItem>
-                <MenuItem Header="_Open..." Click="OpenFile"></MenuItem> 
+                <MenuItem Header="_Open..." Click="OpenFile"></MenuItem>
                 <MenuItem Header="_Save" Click="SaveFile"></MenuItem>
-                <MenuItem Header="_Save As..." Click="SaveFileAs"></MenuItem>
-                <MenuItem Header="_Exit" Click="ExitFunc"></MenuItem>
+                <MenuItem Header="Save _As..." Click="SaveFileAs"></MenuItem>
+                <MenuItem Header="E_xit" Click="ExitFunc"></MenuItem>
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem Header="_Wrap" IsCheckable="True" Checked="WrapOn" Unchecked="WrapOff"></MenuItem>
@@ -31,16 +26,14 @@
             </MenuItem>
         </Menu>
 
+        <!-- STATUS BAR CONTENT-->
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem x:Name="StatusBar" Content="0" HorizontalAlignment="Right"></StatusBarItem>
+        </StatusBar>
 
-        <!-- BODY CONTENT -->
-
-        <TextBox Name="FileTextBox" Grid.Row="1" AcceptsReturn="True" AcceptsTab="True"/>
-
-        <!-- STATUS CONTENT -->
-
-        <TextBlock Grid.Row="2">this is text</TextBlock>
-
-
-        <!--<TextBlock Grid.Row="1" Text="hello world" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
-    </Grid>
+        <!-- CENTERAL CONENT -->
+        <Grid>
+            <TextBox Name="FileTextBox" Grid.Row="1" AcceptsReturn="True" AcceptsTab="True" TextChanged="UpdateCharCount"/>
+        </Grid>
+    </DockPanel>
 </Window>
