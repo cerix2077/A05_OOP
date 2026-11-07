@@ -1,4 +1,12 @@
-﻿using Microsoft.Win32;
+﻿/*
+ * FILE             : MainWindow.xaml.cs
+ * PROJECT          : Assignment 5
+ * PROGRAMMER       : Cameron Snow & Byron Balsom
+ * FIRST VERSION    : 2026-10-10
+ * DESCRIPTION:
+ */
+
+using Microsoft.Win32;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -23,8 +31,10 @@ namespace A05_Snow
         //  it is empty on a blank page and will be set to the data in an opened file or text data successfully saved
         private string _comparatorString = string.Empty; 
         private string _workingFilePath = string.Empty;
-
         private string _workingFileName = "Untitled";
+
+        private bool _changesMade = false;
+
 
         public string comparatorString
         {
@@ -44,11 +54,28 @@ namespace A05_Snow
             set { _workingFileName = value; }
         }
 
+        public bool changesMade
+        {
+            get { return _changesMade; }
+            set { _changesMade = value; }
+        }
+
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
+
+        /*
+        * METHOD       : 
+        * DESCRIPTION  :
+        *   
+        * PARAMETERS   :
+        *     : 
+        * RETURNS      :
+        *   
+        */
         MessageBoxResult UnsavedChangesWarning(object sender, RoutedEventArgs e)
         {
             //prompt user for yes/no/cancel
@@ -71,10 +98,18 @@ namespace A05_Snow
         }
 
 
-
+        /*
+        * METHOD       : 
+        * DESCRIPTION  :
+        *   
+        * PARAMETERS   :
+        *     : 
+        * RETURNS      :
+        *   
+        */
         public void NewFile(object sender, RoutedEventArgs e)
         {
-            if (FileTextBox.Text != comparatorString)
+            if (changesMade)
             {
                 MessageBoxResult choice;
                 choice = UnsavedChangesWarning(sender, e);
@@ -89,13 +124,21 @@ namespace A05_Snow
                     workingFileName = "untitled";
                 }
             }
-
-
         }
 
+
+        /*
+        * METHOD       : 
+        * DESCRIPTION  :
+        *   
+        * PARAMETERS   :
+        *     : 
+        * RETURNS      :
+        *   
+        */
         public void OpenFile(object sender, RoutedEventArgs e)
         {
-            if (FileTextBox.Text != comparatorString)
+            if (changesMade)
             {
                 //prompt user for yes/no/cancel with focus set onto yes for enter press selection
                 MessageBoxResult choice;
@@ -130,6 +173,16 @@ namespace A05_Snow
             }
         }
 
+        
+        /*
+        * METHOD       : 
+        * DESCRIPTION  :
+        *   
+        * PARAMETERS   :
+        *     : 
+        * RETURNS      :
+        *   
+        */
         public void SaveFile(object sender, RoutedEventArgs e)
         {
             // check if a file exists to save too, otherwise use SaveFileAs()
@@ -143,6 +196,16 @@ namespace A05_Snow
             }
         }
 
+
+        /*
+        * METHOD       : 
+        * DESCRIPTION  :
+        *   
+        * PARAMETERS   :
+        *     : 
+        * RETURNS      :
+        *   
+        */
         public void SaveFileAs(object sender, RoutedEventArgs e)
         {
             SaveFileDialog sfd = new SaveFileDialog();
@@ -155,14 +218,35 @@ namespace A05_Snow
             }
         }
 
-        void UpdateCharCount(object sender, RoutedEventArgs e)
+
+        /*
+        * METHOD       : 
+        * DESCRIPTION  :
+        *   
+        * PARAMETERS   :
+        *     : 
+        * RETURNS      :
+        *   
+        */
+        void TextChangedEvent(object sender, RoutedEventArgs e)
         {
             StatusBar.Content = FileTextBox.Text.Length.ToString();
+            changesMade = (FileTextBox.Text != comparatorString);
         }
 
+
+        /*
+        * METHOD       : 
+        * DESCRIPTION  :
+        *   
+        * PARAMETERS   :
+        *     : 
+        * RETURNS      :
+        *   
+        */
         public void ExitFunc(object sender, RoutedEventArgs e)
         {
-            if (FileTextBox.Text != comparatorString)
+            if (changesMade)
             {
                 MessageBoxResult choice;
                 choice = UnsavedChangesWarning(sender, e);
@@ -181,16 +265,46 @@ namespace A05_Snow
             }
         }
 
+        
+        /*
+        * METHOD       : 
+        * DESCRIPTION  :
+        *   
+        * PARAMETERS   :
+        *     : 
+        * RETURNS      :
+        *   
+        */
         public void WrapOn(object sender, RoutedEventArgs e)
         {
             FileTextBox.TextWrapping = TextWrapping.Wrap;
         }
 
+        
+        /*
+        * METHOD       : 
+        * DESCRIPTION  :
+        *   
+        * PARAMETERS   :
+        *     : 
+        * RETURNS      :
+        *   
+        */
         public void WrapOff(object sender, RoutedEventArgs e)
         {
             FileTextBox.TextWrapping = TextWrapping.NoWrap;
         }
 
+
+        /*
+        * METHOD       : 
+        * DESCRIPTION  :
+        *   
+        * PARAMETERS   :
+        *     : 
+        * RETURNS      :
+        *   
+        */
         public void ShowAboutPage(object sender, RoutedEventArgs e) // this will be refactored to display a separate xaml page
         {
             MessageBoxResult result;
