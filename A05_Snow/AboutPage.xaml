@@ -5,8 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:A05_Snow"
         mc:Ignorable="d"
-        Title="AboutPage" Height="450" Width="800">
+        Title="About SETpad" Height="280" Width="425" ResizeMode="NoResize">
+
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
+            
+        </Grid.ColumnDefinitions>
+        <!-- TITLE HEADER -->
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="18"  Margin="2.5" >SETpad 2026</TextBlock>
+        <!--  -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="2.5" >Version:</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="1" Margin="2.5">1.0</TextBlock>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="2.5">Developers:</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="1" Margin="2.5">Byron Balsom</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="1" Margin="2.5">Cameron Snow</TextBlock>
+
+        <Border 
+            Width="275" Height="100"      
+            BorderBrush="SlateGray" BorderThickness="2" 
+            Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
+            >
+            <TextBlock 
+                Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" 
+                HorizontalAlignment="Center" VerticalAlignment="Center" 
+                TextWrapping="Wrap" TextAlignment="Center"
+                >
+                The SETpad application imitates the usability of an older notepad application, using wpf.
+
+            </TextBlock>
+        </Border>
+        <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="2.5">
+            Source code can be found at the <Hyperlink NavigateUri="https://github.com/cerix2077/A05_OOP">Github repo</Hyperlink>
+        </TextBlock>
     </Grid>
 </Window>

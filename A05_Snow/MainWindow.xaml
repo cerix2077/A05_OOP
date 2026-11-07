@@ -33,7 +33,7 @@
 
         <!-- CENTERAL CONENT -->
         <Grid>
-            <TextBox Name="FileTextBox" AcceptsReturn="True" AcceptsTab="True" TextChanged="TextChangedEvent"/>
+            <TextBox Name="FileTextBox" AcceptsReturn="True" AcceptsTab="True" TextChanged="TextChangedEvent" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
         </Grid>
     </DockPanel>
 </Window>

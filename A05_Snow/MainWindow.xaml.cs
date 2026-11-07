@@ -27,8 +27,7 @@ namespace A05_Snow
     public partial class MainWindow : Window
     {
 
-        // this string holds the origin state of the content within the FileTextBox,
-        //  it is empty on a blank page and will be set to the data in an opened file or text data successfully saved
+        // Holds the 
         private string _comparatorString = string.Empty; 
         private string _workingFilePath = string.Empty;
         private string _workingFileName = "Untitled";
@@ -307,8 +306,13 @@ namespace A05_Snow
         */
         public void ShowAboutPage(object sender, RoutedEventArgs e) // this will be refactored to display a separate xaml page
         {
-            MessageBoxResult result;
-            result = MessageBox.Show("message box content here", "Title String");
+            //MessageBoxResult result;
+
+            AboutPage AboutWindow = new AboutPage();
+            AboutWindow.Owner = this;
+            AboutWindow.ShowDialog();
+
+            //result = MessageBox.Show("message box content here", "Title String");
         }
 
     }
