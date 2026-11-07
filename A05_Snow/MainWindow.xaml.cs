@@ -308,7 +308,7 @@ namespace A05_Snow
         public void ShowAboutPage(object sender, RoutedEventArgs e) // this will be refactored to display a separate xaml page
         {
             MessageBoxResult result;
-            result = MessageBox.Show("message box ocntent here", "Title Sring");
+            result = MessageBox.Show("message box content here", "Title String");
         }
 
     }
