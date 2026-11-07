@@ -47,7 +47,7 @@
             </TextBlock>
         </Border>
         <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="2.5">
-            Source code can be found at the <Hyperlink NavigateUri="https://github.com/cerix2077/A05_OOP">Github repo</Hyperlink>
+            Source code can be found at the <Hyperlink NavigateUri="https://github.com/cerix2077/A05_OOP" RequestNavigate="HyperlinkNavHandler">Github repo</Hyperlink>
         </TextBlock>
     </Grid>
 </Window>

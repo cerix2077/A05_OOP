@@ -67,15 +67,17 @@ namespace A05_Snow
 
 
         /*
-        * METHOD       : 
+        * METHOD       : ChangesMadePrompt
         * DESCRIPTION  :
-        *   
+        *   method to prompt user if the want to save the current textbox data before 
+        *       performing the action in calling method
         * PARAMETERS   :
-        *     : 
+        *   object sender           : the object which raised the event
+        *   RoutedEventArgs e       : state info and data of an event
         * RETURNS      :
-        *   
+        *   MessageBoxResult result : an enum relating to the selected option
         */
-        MessageBoxResult UnsavedChangesWarning(object sender, RoutedEventArgs e)
+        MessageBoxResult ChangesMadePrompt(object sender, RoutedEventArgs e)
         {
             //prompt user for yes/no/cancel
             MessageBoxResult result;
@@ -102,26 +104,31 @@ namespace A05_Snow
         * DESCRIPTION  :
         *   
         * PARAMETERS   :
-        *     : 
+        *   object sender           : the object which raised the event
+        *   RoutedEventArgs e       : state info and data of an event 
         * RETURNS      :
-        *   
+        *   N/A
         */
         public void NewFile(object sender, RoutedEventArgs e)
         {
             if (changesMade)
             {
                 MessageBoxResult choice;
-                choice = UnsavedChangesWarning(sender, e);
+                choice = ChangesMadePrompt(sender, e);
                 if (choice == MessageBoxResult.Yes)
                 {
                     SaveFile(sender, e);
+                    FileTextBox.Text = "";
+                    workingFilePath = string.Empty;
+                    workingFileName = "Untitled";
                 }
                 else if (choice == MessageBoxResult.No)
                 {
                     FileTextBox.Text = "";
                     workingFilePath = string.Empty;
-                    workingFileName = "untitled";
+                    workingFileName = "Untitled";
                 }
+                // cancel and x button both drop through and do nothing
             }
         }
 
@@ -131,9 +138,10 @@ namespace A05_Snow
         * DESCRIPTION  :
         *   
         * PARAMETERS   :
-        *     : 
+        *   object sender           : the object which raised the event
+        *   RoutedEventArgs e       : state info and data of an event
         * RETURNS      :
-        *   
+        *   N/A
         */
         public void OpenFile(object sender, RoutedEventArgs e)
         {
@@ -141,7 +149,7 @@ namespace A05_Snow
             {
                 //prompt user for yes/no/cancel with focus set onto yes for enter press selection
                 MessageBoxResult choice;
-                choice = UnsavedChangesWarning(sender, e);
+                choice = ChangesMadePrompt(sender, e);
                 if (choice == MessageBoxResult.Yes)
                 {
                     SaveFile(sender, e);
@@ -172,15 +180,16 @@ namespace A05_Snow
             }
         }
 
-        
+
         /*
         * METHOD       : 
         * DESCRIPTION  :
         *   
         * PARAMETERS   :
-        *     : 
+        *   object sender           : the object which raised the event
+        *   RoutedEventArgs e       : state info and data of an event
         * RETURNS      :
-        *   
+        *   N/A
         */
         public void SaveFile(object sender, RoutedEventArgs e)
         {
@@ -201,9 +210,10 @@ namespace A05_Snow
         * DESCRIPTION  :
         *   
         * PARAMETERS   :
-        *     : 
+        *   object sender           : the object which raised the event
+        *   RoutedEventArgs e       : state info and data of an event
         * RETURNS      :
-        *   
+        *   N/A
         */
         public void SaveFileAs(object sender, RoutedEventArgs e)
         {
@@ -223,11 +233,12 @@ namespace A05_Snow
         * DESCRIPTION  :
         *   
         * PARAMETERS   :
-        *     : 
+        *   object sender           : the object which raised the event
+        *   RoutedEventArgs e       : state info and data of an event
         * RETURNS      :
-        *   
+        *   N/A
         */
-        void TextChangedEvent(object sender, RoutedEventArgs e)
+        public void TextChangedEvent(object sender, RoutedEventArgs e)
         {
             StatusBar.Content = FileTextBox.Text.Length.ToString();
             changesMade = (FileTextBox.Text != comparatorString);
@@ -239,16 +250,17 @@ namespace A05_Snow
         * DESCRIPTION  :
         *   
         * PARAMETERS   :
-        *     : 
+        *   object sender           : the object which raised the event
+        *   RoutedEventArgs e       : state info and data of an event
         * RETURNS      :
-        *   
+        *   N/A
         */
         public void ExitFunc(object sender, RoutedEventArgs e)
         {
             if (changesMade)
             {
                 MessageBoxResult choice;
-                choice = UnsavedChangesWarning(sender, e);
+                choice = ChangesMadePrompt(sender, e);
                 if (choice == MessageBoxResult.Yes)
                 {
                     SaveFile(sender, e);
@@ -264,30 +276,32 @@ namespace A05_Snow
             }
         }
 
-        
+
         /*
         * METHOD       : 
         * DESCRIPTION  :
         *   
         * PARAMETERS   :
-        *     : 
+        *   object sender           : the object which raised the event
+        *   RoutedEventArgs e       : state info and data of an event
         * RETURNS      :
-        *   
+        *   N/A
         */
         public void WrapOn(object sender, RoutedEventArgs e)
         {
             FileTextBox.TextWrapping = TextWrapping.Wrap;
         }
 
-        
+
         /*
         * METHOD       : 
         * DESCRIPTION  :
         *   
         * PARAMETERS   :
-        *     : 
+        *   object sender           : the object which raised the event
+        *   RoutedEventArgs e       : state info and data of an event
         * RETURNS      :
-        *   
+        *   N/A
         */
         public void WrapOff(object sender, RoutedEventArgs e)
         {
@@ -300,20 +314,16 @@ namespace A05_Snow
         * DESCRIPTION  :
         *   
         * PARAMETERS   :
-        *     : 
+        *   object sender           : the object which raised the event
+        *   RoutedEventArgs e       : state info and data of an event
         * RETURNS      :
-        *   
+        *   N/A
         */
         public void ShowAboutPage(object sender, RoutedEventArgs e) // this will be refactored to display a separate xaml page
         {
-            //MessageBoxResult result;
-
             AboutPage AboutWindow = new AboutPage();
             AboutWindow.Owner = this;
             AboutWindow.ShowDialog();
-
-            //result = MessageBox.Show("message box content here", "Title String");
         }
-
     }
 }
