@@ -75,7 +75,7 @@ namespace A05_Snow
         * RETURNS      :
         *   
         */
-        MessageBoxResult UnsavedChangesWarning(object sender, RoutedEventArgs e)
+        MessageBoxResult UnsavedChangesWarning(object sender, EventArgs e)
         {
             //prompt user for yes/no/cancel
             MessageBoxResult result;
@@ -261,6 +261,27 @@ namespace A05_Snow
             else
             {
                 this.Close();
+            }
+        }
+
+        public void CloseWindow(object sender, CancelEventArgs e)
+        {
+            if (FileTextBox.Text != comparatorString)
+            {
+                MessageBoxResult choice = UnsavedChangesWarning(sender, e);
+                if  (choice == MessageBoxResult.Yes)
+                {
+                    SaveFile(sender, null);
+                    e.Cancel = false;
+                }
+                else if (choice == MessageBoxResult.No)
+                {
+                    e.Cancel = false;
+                }
+                else if (choice == MessageBoxResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
             }
         }
 
