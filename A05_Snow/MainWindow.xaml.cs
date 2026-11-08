@@ -117,14 +117,14 @@ namespace A05_Snow
                     FileTextBox.Text = "";
                     workingFilePath = string.Empty;
                     workingFileName = "Untitled";
-                    this.Title = workingFileName;
+                    this.Title = "SETpad - Untitled";
                 }
                 else if (choice == MessageBoxResult.No)
                 {
                     FileTextBox.Text = "";
                     workingFilePath = string.Empty;
                     workingFileName = "Untitled";
-                    this.Title = workingFileName;
+                    this.Title = "SETpad - Untitled";
                 }
                 // cancel and x button both drop through and do nothing
             }
