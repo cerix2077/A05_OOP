@@ -7,6 +7,7 @@
  */
 
 using Microsoft.Win32;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -77,7 +78,7 @@ namespace A05_Snow
         * RETURNS      :
         *   MessageBoxResult result : an enum relating to the selected option
         */
-        MessageBoxResult ChangesMadePrompt(object sender, RoutedEventArgs e)
+        MessageBoxResult ChangesMadePrompt(object sender, EventArgs e)
         {
             //prompt user for yes/no/cancel
             MessageBoxResult result;
@@ -100,8 +101,8 @@ namespace A05_Snow
 
 
         /*
-        * METHOD       : 
-        * DESCRIPTION  :
+        * METHOD       : NewFile
+        * DESCRIPTION  : Creates a new file and clears the textbox.
         *   
         * PARAMETERS   :
         *   object sender           : the object which raised the event
@@ -119,12 +120,12 @@ namespace A05_Snow
                 {
                     SaveFile(sender, e);
                     FileTextBox.Text = "";
-                    workingFilePath = string.Empty;
-                    workingFileName = "Untitled";
+                    workingFilePath = string.Empty; 
+                    workingFileName = "Untitled";  
                 }
                 else if (choice == MessageBoxResult.No)
                 {
-                    FileTextBox.Text = "";
+                    FileTextBox.Text = "";  
                     workingFilePath = string.Empty;
                     workingFileName = "Untitled";
                 }
@@ -134,8 +135,8 @@ namespace A05_Snow
 
 
         /*
-        * METHOD       : 
-        * DESCRIPTION  :
+        * METHOD       : OpenFile
+        * DESCRIPTION  : Allows the user to select a file to open and displays the data in the textbox.
         *   
         * PARAMETERS   :
         *   object sender           : the object which raised the event
@@ -150,11 +151,11 @@ namespace A05_Snow
                 //prompt user for yes/no/cancel with focus set onto yes for enter press selection
                 MessageBoxResult choice;
                 choice = ChangesMadePrompt(sender, e);
-                if (choice == MessageBoxResult.Yes)
+                if (choice == MessageBoxResult.Yes) // if user selects yes, save the file and then open a new file
                 {
                     SaveFile(sender, e);
                 }
-                else if (choice == MessageBoxResult.No)
+                else if (choice == MessageBoxResult.No) // if user selects no, open a new file without saving
                 {
                     OpenFileDialog ofd = new OpenFileDialog();
                     if (ofd.ShowDialog() == true)
@@ -182,8 +183,8 @@ namespace A05_Snow
 
 
         /*
-        * METHOD       : 
-        * DESCRIPTION  :
+        * METHOD       : SaveFile
+        * DESCRIPTION  : Saves the current data to a file.
         *   
         * PARAMETERS   :
         *   object sender           : the object which raised the event
@@ -206,8 +207,8 @@ namespace A05_Snow
 
 
         /*
-        * METHOD       : 
-        * DESCRIPTION  :
+        * METHOD       : SaveFileAs
+        * DESCRIPTION  : Allows the user to select a file to save the current data to.
         *   
         * PARAMETERS   :
         *   object sender           : the object which raised the event
@@ -229,9 +230,9 @@ namespace A05_Snow
 
 
         /*
-        * METHOD       : 
-        * DESCRIPTION  :
-        *   
+        * METHOD       : TextChangedEvent
+        * DESCRIPTION  : Detects when the text in the textbox has been changed,
+        *              : updates the status bar with an active character count.
         * PARAMETERS   :
         *   object sender           : the object which raised the event
         *   RoutedEventArgs e       : state info and data of an event
@@ -240,14 +241,14 @@ namespace A05_Snow
         */
         public void TextChangedEvent(object sender, RoutedEventArgs e)
         {
-            StatusBar.Content = FileTextBox.Text.Length.ToString();
-            changesMade = (FileTextBox.Text != comparatorString);
+            StatusBar.Content = FileTextBox.Text.Length.ToString(); // update the status bar with the current character count
+            changesMade = (FileTextBox.Text != comparatorString);   // update changesMade to the current text, to determine if changes have been made since the last save
         }
 
 
         /*
-        * METHOD       : 
-        * DESCRIPTION  :
+        * METHOD       : ExitFunc
+        * DESCRIPTION  : Exits the application
         *   
         * PARAMETERS   :
         *   object sender           : the object which raised the event
@@ -257,29 +258,60 @@ namespace A05_Snow
         */
         public void ExitFunc(object sender, RoutedEventArgs e)
         {
-            if (changesMade)
+            if (changesMade)    // check if changes have been made to the text, if so it will prompt the user to save changes before exiting
             {
                 MessageBoxResult choice;
                 choice = ChangesMadePrompt(sender, e);
-                if (choice == MessageBoxResult.Yes)
+                if (choice == MessageBoxResult.Yes) // if user selects yes, save the file and then exit
                 {
                     SaveFile(sender, e);
                 }
-                if (choice == MessageBoxResult.No)
+                if (choice == MessageBoxResult.No)  // if user selects no, exit without saving
                 {
                     this.Close();
                 }
             }
-            else
+            else // if no changes have been made, exit without prompting the user to save changes
             {
                 this.Close();
             }
         }
 
 
+
         /*
-        * METHOD       : 
-        * DESCRIPTION  :
+        * METHOD       : CloseWindow
+        * DESCRIPTION  : When the user attempts to close the window, 
+        *              : this method will prompt the user to save changes if any have been made.
+        * PARAMETERS   : object sender      : the object which raised the event
+        *              : CancelEventArgs e  : 
+        * RETURNS      : N/A
+        */
+        public void CloseWindow(object sender, CancelEventArgs e)
+        {
+            if (FileTextBox.Text != comparatorString)   // check if changes have been made to the text, if so it will prompt the user to save changes before exiting
+            {
+                MessageBoxResult choice = ChangesMadePrompt(sender, e);
+                if (choice == MessageBoxResult.Yes)     // if the user selects yes, save the file and then exit
+                {
+                    SaveFile(sender, null);
+                    e.Cancel = false;
+                }
+                else if (choice == MessageBoxResult.No) // if the user selects no, exit without saving
+                {
+                    e.Cancel = false;
+                }
+                else if (choice == MessageBoxResult.Cancel) // if the user selects cancel, the program continues to run and the window does not close
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+
+
+        /*
+        * METHOD       : WrapOn
+        * DESCRIPTION  : Enables text wrapping
         *   
         * PARAMETERS   :
         *   object sender           : the object which raised the event
@@ -294,8 +326,8 @@ namespace A05_Snow
 
 
         /*
-        * METHOD       : 
-        * DESCRIPTION  :
+        * METHOD       : WrapOff
+        * DESCRIPTION  : Disables text wrapping
         *   
         * PARAMETERS   :
         *   object sender           : the object which raised the event
@@ -310,8 +342,8 @@ namespace A05_Snow
 
 
         /*
-        * METHOD       : 
-        * DESCRIPTION  :
+        * METHOD       : ShowAboutPage
+        * DESCRIPTION  : Displays the about page
         *   
         * PARAMETERS   :
         *   object sender           : the object which raised the event
