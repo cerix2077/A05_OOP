@@ -156,6 +156,7 @@ namespace A05_Snow
                     {
                         FileTextBox.Text = File.ReadAllText(ofd.FileName);
                         comparatorString = FileTextBox.Text; // this is the current 
+                        changesMade = false;
                         workingFilePath = ofd.FileName;
                         workingFileName = System.IO.Path.GetFileName(workingFilePath); // Path has ambiguity between IO.Path and Windows.Shapes.Path
                         this.Title = $"SETpad - {workingFilePath}";
@@ -168,6 +169,7 @@ namespace A05_Snow
                     {
                         FileTextBox.Text = File.ReadAllText(ofd.FileName);
                         comparatorString = FileTextBox.Text; // this is the current 
+                        changesMade = false;
                         workingFilePath = ofd.FileName;
                         workingFileName = System.IO.Path.GetFileName(workingFileName); // Path has ambiguity between IO.Path and Windows.Shapes.Path
                         this.Title = $"SETpad - {workingFilePath}";
@@ -181,6 +183,7 @@ namespace A05_Snow
                 {
                     FileTextBox.Text = File.ReadAllText(ofd.FileName);
                     comparatorString = FileTextBox.Text; // this is the current 
+                    changesMade = false;
                     workingFilePath = ofd.FileName;
                     workingFileName = System.IO.Path.GetFileName(workingFilePath); // Path has ambiguity between IO.Path and Windows.Shapes.Path
                     this.Title = $"SETpad - {workingFilePath}";
@@ -206,6 +209,7 @@ namespace A05_Snow
             {
                 File.WriteAllText(workingFilePath, FileTextBox.Text);
                 comparatorString = FileTextBox.Text;
+                changesMade = false;
             }
             else
             {
@@ -229,11 +233,12 @@ namespace A05_Snow
             SaveFileDialog sfd = new SaveFileDialog();
             if(sfd.ShowDialog() == true) // returns true if user selects ok 
             {
+                comparatorString = FileTextBox.Text;
+                changesMade = false;
                 workingFilePath = sfd.FileName;
                 workingFileName = System.IO.Path.GetFileName(workingFilePath);
                 File.WriteAllText(workingFilePath, FileTextBox.Text);
-                this.Title = workingFilePath;
-                comparatorString = FileTextBox.Text;
+                this.Title = $"SETpad - {workingFilePath}";
             }
         }
 
