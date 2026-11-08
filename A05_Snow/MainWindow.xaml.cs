@@ -2,11 +2,11 @@
  * FILE             : MainWindow.xaml.cs
  * PROJECT          : Assignment 5
  * PROGRAMMER       : Cameron Snow & Byron Balsom
- * FIRST VERSION    : 2026-10-10
- * DESCRIPTION:
+ * FIRST VERSION    : 2026-11-05
  */
 
 using Microsoft.Win32;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -24,17 +24,26 @@ namespace A05_Snow
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
+
+    /*
+     * NAME     : MainWindow
+     * PURPOSE  : Code behind for the SETpad text editor
+     */
     public partial class MainWindow : Window
     {
 
-        // Holds the 
-        private string _comparatorString = string.Empty; 
+        // full path to file being edited
         private string _workingFilePath = string.Empty;
+        // an isolated filename of the file being edited
         private string _workingFileName = "Untitled";
 
+        // Holds the last saved string to compare if changes were made
+        private string _comparatorString = string.Empty; 
+        // Bool to store if changes have been made
         private bool _changesMade = false;
 
-
+        // Properties
         public string comparatorString
         {
             get { return _comparatorString; }
@@ -72,37 +81,24 @@ namespace A05_Snow
         *   method to prompt user if the want to save the current textbox data before 
         *       performing the action in calling method
         * PARAMETERS   :
-        *   object sender           : the object which raised the event
-        *   RoutedEventArgs e       : state info and data of an event
+        *   object sender   : the object which raised the event
         * RETURNS      :
         *   MessageBoxResult result : an enum relating to the selected option
         */
-        MessageBoxResult ChangesMadePrompt(object sender, RoutedEventArgs e)
+        MessageBoxResult ChangesMadePrompt(object sender) 
         {
             //prompt user for yes/no/cancel
             MessageBoxResult result;
             string saveString = $"Do you want to Save changes to {workingFileName}?";
             result = MessageBox.Show(saveString, "SETpad",  MessageBoxButton.YesNoCancel);
             return result;
-            //if (result == MessageBoxResult.Yes)
-            //{
-            //    SaveFile(sender, e);
-            //}
-            //else if (result == MessageBoxResult.No)
-            //{
-
-            //}
-            //else if (result == MessageBoxResult.Cancel)
-            //{
-
-            //}
         }
 
 
         /*
-        * METHOD       : 
+        * METHOD       : NewFile
         * DESCRIPTION  :
-        *   
+        *   this method handles logic for opening a blank untitled document
         * PARAMETERS   :
         *   object sender           : the object which raised the event
         *   RoutedEventArgs e       : state info and data of an event 
@@ -114,19 +110,21 @@ namespace A05_Snow
             if (changesMade)
             {
                 MessageBoxResult choice;
-                choice = ChangesMadePrompt(sender, e);
+                choice = ChangesMadePrompt(sender);
                 if (choice == MessageBoxResult.Yes)
                 {
                     SaveFile(sender, e);
                     FileTextBox.Text = "";
                     workingFilePath = string.Empty;
                     workingFileName = "Untitled";
+                    this.Title = workingFileName;
                 }
                 else if (choice == MessageBoxResult.No)
                 {
                     FileTextBox.Text = "";
                     workingFilePath = string.Empty;
                     workingFileName = "Untitled";
+                    this.Title = workingFileName;
                 }
                 // cancel and x button both drop through and do nothing
             }
@@ -134,9 +132,9 @@ namespace A05_Snow
 
 
         /*
-        * METHOD       : 
+        * METHOD       : OpenFile
         * DESCRIPTION  :
-        *   
+        *   this methods handles opening an existing file
         * PARAMETERS   :
         *   object sender           : the object which raised the event
         *   RoutedEventArgs e       : state info and data of an event
@@ -149,10 +147,19 @@ namespace A05_Snow
             {
                 //prompt user for yes/no/cancel with focus set onto yes for enter press selection
                 MessageBoxResult choice;
-                choice = ChangesMadePrompt(sender, e);
+                choice = ChangesMadePrompt(sender);
                 if (choice == MessageBoxResult.Yes)
                 {
                     SaveFile(sender, e);
+                    OpenFileDialog ofd = new OpenFileDialog();
+                    if (ofd.ShowDialog() == true)
+                    {
+                        FileTextBox.Text = File.ReadAllText(ofd.FileName);
+                        comparatorString = FileTextBox.Text; // this is the current 
+                        workingFilePath = ofd.FileName;
+                        workingFileName = System.IO.Path.GetFileName(workingFilePath); // Path has ambiguity between IO.Path and Windows.Shapes.Path
+                        this.Title = $"SETpad - {workingFilePath}";
+                    }
                 }
                 else if (choice == MessageBoxResult.No)
                 {
@@ -163,6 +170,7 @@ namespace A05_Snow
                         comparatorString = FileTextBox.Text; // this is the current 
                         workingFilePath = ofd.FileName;
                         workingFileName = System.IO.Path.GetFileName(workingFileName); // Path has ambiguity between IO.Path and Windows.Shapes.Path
+                        this.Title = $"SETpad - {workingFilePath}";
                     }
                 }
             }
@@ -174,7 +182,7 @@ namespace A05_Snow
                     FileTextBox.Text = File.ReadAllText(ofd.FileName);
                     comparatorString = FileTextBox.Text; // this is the current 
                     workingFilePath = ofd.FileName;
-                    workingFileName = System.IO.Path.GetFileName(workingFileName); // Path has ambiguity between IO.Path and Windows.Shapes.Path
+                    workingFileName = System.IO.Path.GetFileName(workingFilePath); // Path has ambiguity between IO.Path and Windows.Shapes.Path
                     this.Title = $"SETpad - {workingFilePath}";
                 }
             }
@@ -182,9 +190,9 @@ namespace A05_Snow
 
 
         /*
-        * METHOD       : 
+        * METHOD       : SaveFile
         * DESCRIPTION  :
-        *   
+        *   this method handles saving to the current file or passes it of to SaveFileAs to make file if none exists
         * PARAMETERS   :
         *   object sender           : the object which raised the event
         *   RoutedEventArgs e       : state info and data of an event
@@ -197,6 +205,7 @@ namespace A05_Snow
             if(workingFilePath != String.Empty)// file was found to save too
             {
                 File.WriteAllText(workingFilePath, FileTextBox.Text);
+                comparatorString = FileTextBox.Text;
             }
             else
             {
@@ -206,9 +215,9 @@ namespace A05_Snow
 
 
         /*
-        * METHOD       : 
+        * METHOD       : SaveFileAs
         * DESCRIPTION  :
-        *   
+        *   use a save file dialoug to save choose the filename to sve as
         * PARAMETERS   :
         *   object sender           : the object which raised the event
         *   RoutedEventArgs e       : state info and data of an event
@@ -224,14 +233,15 @@ namespace A05_Snow
                 workingFileName = System.IO.Path.GetFileName(workingFilePath);
                 File.WriteAllText(workingFilePath, FileTextBox.Text);
                 this.Title = workingFilePath;
+                comparatorString = FileTextBox.Text;
             }
         }
 
 
         /*
-        * METHOD       : 
+        * METHOD       : TextChangedEvent
         * DESCRIPTION  :
-        *   
+        *   this method handles both updating the status bar and checking if changes have been made to the 
         * PARAMETERS   :
         *   object sender           : the object which raised the event
         *   RoutedEventArgs e       : state info and data of an event
@@ -246,9 +256,9 @@ namespace A05_Snow
 
 
         /*
-        * METHOD       : 
+        * METHOD       : ExitFunc
         * DESCRIPTION  :
-        *   
+        *   handles exiting using the menu option
         * PARAMETERS   :
         *   object sender           : the object which raised the event
         *   RoutedEventArgs e       : state info and data of an event
@@ -260,7 +270,7 @@ namespace A05_Snow
             if (changesMade)
             {
                 MessageBoxResult choice;
-                choice = ChangesMadePrompt(sender, e);
+                choice = ChangesMadePrompt(sender);
                 if (choice == MessageBoxResult.Yes)
                 {
                     SaveFile(sender, e);
@@ -276,11 +286,41 @@ namespace A05_Snow
             }
         }
 
+        /*
+        * METHOD       : CloseWindow
+        * DESCRIPTION  :
+        *   handles exiting using the close button
+        * PARAMETERS   :
+        *   object sender           : the object which raised the event
+        *   CancelEventArgs e       : state info and data of an event
+        * RETURNS      :
+        *   N/A
+        */
+        public void CloseWindow(object sender, CancelEventArgs e)
+        {
+            if (FileTextBox.Text != comparatorString)
+            {
+                MessageBoxResult choice = ChangesMadePrompt(sender);
+                if (choice == MessageBoxResult.Yes)
+                {
+                    SaveFile(sender, null);
+                    e.Cancel = false;
+                }
+                else if (choice == MessageBoxResult.No)
+                {
+                    e.Cancel = false;
+                }
+                else if (choice == MessageBoxResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
 
         /*
-        * METHOD       : 
+        * METHOD       : WrapOn
         * DESCRIPTION  :
-        *   
+        *   handles activating text wrapping
         * PARAMETERS   :
         *   object sender           : the object which raised the event
         *   RoutedEventArgs e       : state info and data of an event
@@ -294,9 +334,9 @@ namespace A05_Snow
 
 
         /*
-        * METHOD       : 
+        * METHOD       : WrapOff
         * DESCRIPTION  :
-        *   
+        *   handles deactivationg text wrapping
         * PARAMETERS   :
         *   object sender           : the object which raised the event
         *   RoutedEventArgs e       : state info and data of an event
@@ -310,9 +350,9 @@ namespace A05_Snow
 
 
         /*
-        * METHOD       : 
+        * METHOD       : ShowAboutPage
         * DESCRIPTION  :
-        *   
+        *   handles opening a modal about page
         * PARAMETERS   :
         *   object sender           : the object which raised the event
         *   RoutedEventArgs e       : state info and data of an event

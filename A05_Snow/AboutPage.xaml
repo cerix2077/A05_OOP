@@ -24,14 +24,17 @@
         </Grid.ColumnDefinitions>
         <!-- TITLE HEADER -->
         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="18"  Margin="2.5" >SETpad 2026</TextBlock>
-        <!--  -->
+        
+        <!-- VERSION INFO -->
         <TextBlock Grid.Row="1" Grid.Column="0" Margin="2.5" >Version:</TextBlock>
         <TextBlock Grid.Row="1" Grid.Column="1" Margin="2.5">1.0</TextBlock>
 
+        <!-- DEV INFO -->
         <TextBlock Grid.Row="2" Grid.Column="0" Margin="2.5">Developers:</TextBlock>
         <TextBlock Grid.Row="3" Grid.Column="1" Margin="2.5">Byron Balsom</TextBlock>
         <TextBlock Grid.Row="4" Grid.Column="1" Margin="2.5">Cameron Snow</TextBlock>
 
+        <!-- GITHUB LINK -->
         <Border 
             Width="275" Height="100"      
             BorderBrush="SlateGray" BorderThickness="2" 
@@ -46,8 +49,13 @@
 
             </TextBlock>
         </Border>
+        
+        <!-- GITHUB LINK -->
         <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="2.5">
-            Source code can be found at the <Hyperlink NavigateUri="https://github.com/cerix2077/A05_OOP" RequestNavigate="HyperlinkNavHandler">Github repo</Hyperlink>
+            Source code can be found at the 
+            <Hyperlink NavigateUri="https://github.com/cerix2077/A05_OOP" RequestNavigate="HyperlinkNavHandler">
+                Github repo
+            </Hyperlink>
         </TextBlock>
     </Grid>
 </Window>
