@@ -34,6 +34,7 @@ namespace A05_Snow
         private string _workingFileName = "Untitled";
 
         private bool _changesMade = false;
+        private bool _confirmSave = false;
 
 
         public string comparatorString
@@ -58,6 +59,12 @@ namespace A05_Snow
         {
             get { return _changesMade; }
             set { _changesMade = value; }
+        }
+
+        public bool confirmSave
+        {
+            get { return _confirmSave; }
+            set { _confirmSave = value; }
         }
 
 
@@ -198,10 +205,11 @@ namespace A05_Snow
             if(workingFilePath != String.Empty)// file was found to save too
             {
                 File.WriteAllText(workingFilePath, FileTextBox.Text);
+                _confirmSave = false; 
             }
             else
             {
-                SaveFileAs(sender, e);
+                SaveFileAs(sender, e); 
             }
         }
 
@@ -225,6 +233,7 @@ namespace A05_Snow
                 workingFileName = System.IO.Path.GetFileName(workingFilePath);
                 File.WriteAllText(workingFilePath, FileTextBox.Text);
                 this.Title = workingFilePath;
+                _confirmSave = false;
             }
         }
 
@@ -295,7 +304,14 @@ namespace A05_Snow
                 if (choice == MessageBoxResult.Yes)     // if the user selects yes, save the file and then exit
                 {
                     SaveFile(sender, null);
-                    e.Cancel = false;
+                    if (confirmSave) // if the user selects yes, save the file and then exit
+                    {
+                        e.Cancel = false;
+                    }
+                    else // if the user cancels or closes out of the file explorer, cancels the close window event
+                    {
+                        e.Cancel = true;
+                    }
                 }
                 else if (choice == MessageBoxResult.No) // if the user selects no, exit without saving
                 {
@@ -305,6 +321,10 @@ namespace A05_Snow
                 {
                     e.Cancel = true;
                 }
+            }
+            else // if no changes have been made, exit without prompting the user to save changes
+            {
+                e.Cancel = false;
             }
         }
 
